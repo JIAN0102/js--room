@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        img {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .provide {
+            background-color: pink;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="room container"></div>
+    <div class='container bg-transparent text-info w-100 text-center font-weight-bold mt-3'><a href="index.html">回首頁</a></div>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+    <script>
+        const room = document.querySelector(".room");
+        const token = "4fStUm7nMfcTplDnN2MXVIuMTE58jhXP9ytwxbW38Rb66TfuR1rHyxL5moPI";
+        let url = `https://challenge.thef2e.com/api/thef2e2019/stage6/room/`;
+
+        function getRoomApi() {
+            let str;
+            str = window.location.search;
+            str = str.split("=")
+            url += str[1];
+        }
+        getRoomApi();
+
+
+        let data;
+        axios({
+            method: "get",
+            url: url,
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then((res) => {
+            data = res.data.room[0];
+            console.log(data);
+            console.log(data.amenities['Air-Conditioner']);
+            render();
+            provide();
+        });
+
+
+
+
+        function provide() {
+            let spans = document.querySelectorAll('span');
+            if (!data.amenities['Air-Conditioner']) {
+                spans[3].classList.add('text-secondary');
+            }
+            if (!data.amenities['Breakfast']) {
+                spans[4].classList.add('text-secondary');
+            }
+            if (!data.amenities['Child-Friendly']) {
+                spans[5].classList.add('text-secondary');
+            }
+            if (!data.amenities['Great-View']) {
+                spans[6].classList.add('text-secondary');
+            }
+            if (!data.amenities['Mini-Bar']) {
+                spans[7].classList.add('text-muted');
+            }
+            if (!data.amenities['Pet-Friendly']) {
+                spans[8].classList.add('text-muted');
+            }
+            if (!data.amenities['Refrigerator']) {
+                spans[9].classList.add('text-muted');
+            }
+            if (!data.amenities['Room-Service']) {
+                spans[10].classList.add('text-muted');
+            }
+            if (!data.amenities['Smoke-Free']) {
+                spans[11].classList.add('text-muted');
+            }
+            if (!data.amenities['Sofa']) {
+                spans[12].classList.add('text-muted');
+            }
+            if (!data.amenities['Television']) {
+                spans[13].classList.add('text-muted');
+            }
+            if (!data.amenities['Wi-Fi']) {
+                spans[14].classList.add('text-muted');
+            }
+        }
+
+        function render() {
+            let str = ` 
+                <div class="row mb-3">
+                    <div class="col-4">
+                        <img src="${data.imageUrl[0]}">
+                    </div>
+                    <div class="col-4">
+                        <img src="${data.imageUrl[1]}">
+                    </div>
+                    <div class="col-4">
+                        <img src="${data.imageUrl[2]}">
+                    </div>
+                </div>
+                <div class='row flex-column align-items-center '>
+                    <div class='text-center'>
+                        <h2>${data.name}</h2>
+                        <h4>平日價格:${data.normalDayPrice}   假日價格:${data.holidayPrice}</h4>
+                    </div>
+                    <div class="align-self-start">
+                        <p>${data.description}</p>
+                    </div>
+                    <div>
+                        <p>
+                            <span class="mr-4">CheckIn時間: ${data.checkInAndOut.checkInEarly}</span>
+                            <span class="mr-4">最晚CheckIn時間: ${data.checkInAndOut.checkInLate}</span>
+                            <span>CheckOut時間: ${data.checkInAndOut.checkOut}</span>
+                        </p>
+                    </div>
+                </div>
+                <div class=' provide row  rounded text-center'>
+                    <span class='col-2 font-weight-bold'>空調</span>
+                    <span class='col-2 font-weight-bold'>早餐</span>
+                    <span class='col-2 font-weight-bold'>兒童友善</span>
+                    <span class='col-2 font-weight-bold'>景觀眺望</span>
+                    <span class='col-2 font-weight-bold'>吧檯</span>
+                    <span class='col-2 font-weight-bold'>寵物友善</span>
+                    <span class='col-2 font-weight-bold'>冰箱</span>
+                    <span class='col-2 font-weight-bold'>房間服務</span>
+                    <span class='col-2 font-weight-bold'>抽菸</span>
+                    <span class='col-2 font-weight-bold'>沙發</span>
+                    <span class='col-2 font-weight-bold'>電視</span>
+                    <span class='col-2 font-weight-bold'>Wi-Fi</span>
+                </div>
+            `;
+            room.innerHTML = str;
+        }
+    </script>
+</body>
+
+</html>
